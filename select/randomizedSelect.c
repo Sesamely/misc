@@ -17,6 +17,7 @@ void swap(int a[],int i,int j);
 int randomParttion(int a[],int start,int end);
 int randomizedSelect(int a[],int start,int end,int i);
 
+/*
 int main()
 {
     int a[MAX]={};
@@ -44,6 +45,7 @@ int main()
     printf("第%d小的元素是: %d\n",input,a[i]);
     dispA(a,length);
 }
+*/
 
 //实现期望为线性的选择算法
 int randomizedSelect(int a[],int start,int end,int i)
