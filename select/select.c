@@ -39,7 +39,6 @@ int main()
             printf("重新输入!!!\n");
     }
     i=selectPro(a,0,length-1,input);
-
     printf("第%d小的元素是: %d\n",input,a[i]);
 }
 //插入排序返回中值
