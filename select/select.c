@@ -58,7 +58,7 @@ int b2[(MAX/5+1)]={};                   //记录分割的第n个数组的end
 int c[(MAX)/5+1]={};                    //记录分割的第n个数组的middle 
 int selectPro(int a[],int start,int end,int index)
 {
-    int i=0                                   //*****
+    int i=start                               //*****
         ,bi=0                                 //分的组数
         ,midmid=0                             //分组的中值的中值
         ,loc=0                                //midmid值在数组a中的位子
