@@ -40,6 +40,7 @@ int main()
     }
     i=selectPro(a,0,length-1,input);
     printf("第%d小的元素是: %d\n",input,a[i]);
+    dispA(a,length);
 }
 //插入排序返回中值
 int insertSort_returnMid(int a[],int start,int end)
@@ -57,12 +58,12 @@ int b2[(MAX/5+1)]={};                   //记录分割的第n个数组的end
 int c[(MAX)/5+1]={};                    //记录分割的第n个数组的middle 
 int selectPro(int a[],int start,int end,int index)
 {
-    int i
-        ,bi                             //分的组数
-        ,midmid                         //分组的中值的中值
-        ,loc                            //midmid值在数组a中的位子
-        ,p                              //依据loc快速分组(快速排序算法)后midmid值的实际位置
-        ,k;                             //*****
+    int i=0                                   //*****
+        ,bi=0                                 //分的组数
+        ,midmid=0                             //分组的中值的中值
+        ,loc=0                                //midmid值在数组a中的位子
+        ,p=0                                  //依据loc快速分组(快速排序算法)后midmid值的实际位置
+        ,k=0;                                 //*****
     int length=end-start+1;
     //将大数组分成每个5个元素的一组数组,最后一组1-4个元素
     while((i+4)<length)
@@ -77,7 +78,7 @@ int selectPro(int a[],int start,int end,int index)
         b2[bi++]=length-1;
     }
     //插入排序,返回中值
-    for(int i=0;i<bi;i++)
+    for(i=0;i<bi;i++)
         c[i]=insertSort_returnMid(a,b1[i],b2[i]);
 
     midmid=insertSort_returnMid(c,0,bi-1);
