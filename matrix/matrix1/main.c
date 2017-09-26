@@ -26,9 +26,9 @@ int main()
     char filenameForSave[40];
     int mOrder;
     //initate the matrix according to the prompt
-    printf("please input the filename for M:\n>");
+    printf("\tplease input the filename for M,suggested to be named as 'Data/*****'\n>");
     scanf("%s",filename);
-    printf("please input the matrix's order:\n>");
+    printf("\tplease input the matrix's order:\n>");
     scanf("%d",&mOrder);
 //generate a matrix storaged in ./filename
     generateRandomMatrix(mOrder,filename);
@@ -36,14 +36,15 @@ int main()
     getMatrix(M,filename,mOrder);
 //auto generate I according to the order of the matrix
     autoCreateI(B_X,mOrder);
+//input the filename for saving the inverse matrix
+    printf("\tplease type the filename for saving the matrix's inverse\n \twhich is suggseted to be named as 'Data/***' and\n\tCANNOT the same as the filename you have input!!!\n>");
+    scanf("%s",filenameForSave);
 //LUP-DECOMPOSITION
     LUP_DECOMPOSITION(M,mOrder,P);
 //*************************************************
     for(int i=0;i<mOrder;i++)
         LUP_SOLVE_extend(B_X,i,M,mOrder,P);
 //save the matrix
-    printf("please type the filename for saving the matrix's inverse\n which is suggseted to be named as 'Data/***' and\nCANNOT the same as the filename you have input!!!\n>");
-    scanf("%s",filenameForSave);
     storageMatrix(B_X,mOrder,filenameForSave);
     return 0;
 }
