@@ -1,0 +1,2 @@
+gcc编译四个test*.c文件,直接执行,完成实验. 
+或者直接根据test*.c以及<testResultData>目录中的数据检查.
