@@ -89,10 +89,10 @@ u8 log3[] = {
 //ByteSub
 void subByte(u8 *B)
 {
-    //u8 l=(*B)&0x0F;
-    //u8 h=(*B)>>4;
-    //u32 loc=h*((u32)16)+l;
-    *B=SBox[*B];
+    u8 l=(*B)&0x0F;
+    u8 h=(*B)>>4;
+    u32 loc=h*((u32)16)+l;
+    *B=SBox[loc];
 }
 //S盒变换
 void BoxS(u8 *state,int n)
@@ -184,6 +184,14 @@ void Rotl(u32 *word)
         c[i]=c[i+1];
     c[3]=temp;
 }
+void Rotl2(u32 *word)
+{
+    u8 *c=(u8 *)word;
+    u8 temp=c[3];
+    for(int i=0;i<3;i++)
+        c[3-i]=c[2-i];
+    c[0]=temp;
+}
 //轮密钥产生算法
 void generateK(const u32 *mainKey,u32 *W)
 {
@@ -196,13 +204,13 @@ void generateK(const u32 *mainKey,u32 *W)
         if(i%4==0)
         {
             u32 Rcon=0;
-            *(u8 *)&Rcon=RC[(i/4)%51];
-            Rotl(&temp);
-            for(int i=0;i<4;i++)
-                subByte(&(((u8 *)&temp)[i]));
+            Rotl2(&temp);
+            for(int k=0;k<4;k++)
+                subByte(&(((u8 *)&temp)[k]));
+            ((u8 *)&Rcon)[0]=RC[i/4];
             temp=temp^Rcon;
         }
-        W[i]=W[i-1]^temp;
+        W[i]=W[i-4]^temp;
     }
 }
 //显示一个字的各个字节(由低到高)
@@ -210,7 +218,7 @@ void dispWord(const u32 *word)
 {
     u8 *c=(u8 *)word;
     for(int i=0;i<4;i++)
-        printf("0x%x\t",*c++);
+        printf("0x%02x\t",*c++);
     printf("\n");
 }
 //对4个字,按字循环左移N位以及右移N位
@@ -243,26 +251,26 @@ void dispWords(const u32 *word,int n)
     {
         if(0==i%4)
             printf("\n");
-        printf("%d\t",word[i]);
+        printf("0x%08x\t",word[i]);
     }
     printf("\n");
 }
-
-/*int main()
+/*
+int main()
 {
     u8 K[25]={};
     for(int i=0;i<24;i++)
         K[i]='A';
     int num=getRotateTimes(K);
     printf("%d\n",num);
-    u32 word=1;
+    u32 word=0x12345678;
     dispWord(&word);
-    Rotl(&word);
+    Rotl2(&word);
     dispWord(&word);
     return 0;
 }
-*/
-/*
+
+
 int main()
 {
     u32 word[16];
@@ -325,6 +333,18 @@ int main()
     dispWord((u32 *)c);
     mixColumn((u32 *)c);
     dispWord((u32 *)c);
+    return 0;
+}
+*/
+/*
+int main()
+{
+    u32 maink[4]={0x60153594,0xda791714,0x710198ae,0x00012001};
+    u32 W[50]={};
+    for(int i=0;i<4;i++)
+        dispWord(&maink[i]);
+    generateK(maink,W);
+    dispWords(W,50);
     return 0;
 }
 */
