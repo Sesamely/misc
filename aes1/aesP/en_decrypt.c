@@ -32,22 +32,15 @@ void finalRound(u8 *msg)
     addRoundKey(msg);
 }
 
-void encrypt(u8 *msg,u8 *mainKey)
+void encrypt(u8 *msg)
 {
     I=0;    //当前迭代轮数
-    //dispState(mainKey);
-    //printf("\n");
-    expandKey(mainKey);
-    //for(int i=0;i<(Nr+1);i++)
-    //    dispKey(i);
     addRoundKey(msg);
-    //dispState(msg);
     I++;
     while(I<Nr)
     {
         rnd(msg);
         I++;
-        //printf("\n");
     }
     finalRound(msg);
 }
@@ -65,10 +58,8 @@ void _rnd(u8 *state)
     _byteSub(state);
 }
 
-void decrypt(u8 *ciphertext,u8 *mainKey)
+void decrypt(u8 *ciphertext)
 {
-    expandKey(mainKey);
-
     I=Nr;
     addRoundKey(ciphertext);
     _shiftRow(ciphertext);

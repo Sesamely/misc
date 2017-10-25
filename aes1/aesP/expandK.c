@@ -29,7 +29,7 @@ void expandKey(const u8 *mainKey)
             leftShift(temp,1);
             //对于temp,按字节subByte
             for(int k=0;k<4;k++)
-                temp[k]=subByte(temp[k]);
+                temp[k]=S[temp[k]];
             //temp=temp^Rcon
             Rcon[0]=RC[(i/4)/Nk-1];
             for(int k=0;k<4;k++)

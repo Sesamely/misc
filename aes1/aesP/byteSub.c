@@ -11,10 +11,6 @@
 #include<aeshead.h>
 #include<global.h>
 
-u8 subByte(u8 b)
-{
-    return S[b];
-}
 //S盒置换
 void byteSub(u8 *state)
 {

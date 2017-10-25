@@ -20,24 +20,28 @@ int EDFile(char *filename,u8 *mainKey,int en)
     FILE *frp,*fwp;
     if((frp=fopen(filename,"rb"))==NULL)
         return 1;
-    strcat(tempname,"New");
+    if(en)
+        strcat(tempname,"EN");
+    else
+        strcat(tempname,"DE");
     strcat(tempname,filename);
     strcpy(filename,tempname);
     if((fwp=fopen(filename,"wb"))==NULL)
         return 2;
 
     generateNewS(0xFE);
+    expandKey(mainKey);
 
     do{
         rcnt=fread(buff,sizeof(unsigned char),BUFFERSIZE,frp);
         
-        if(rcnt%16)
-            rcnt=(rcnt/16+1)*16;
+        if(rcnt!=BUFFERSIZE&&(rcnt-1)%16!=0)
+            rcnt=((rcnt-1)/16+1)*16;
         for(int i=0;i<rcnt/16;i++)
             if(en)
-                encrypt((u8 *)&buff[16*i],mainKey);
+                encrypt((u8 *)&buff[16*i]);
             else
-                decrypt((u8 *)&buff[16*i],mainKey);
+                decrypt((u8 *)&buff[16*i]);
         
         wcnt=fwrite(buff,sizeof(unsigned char),rcnt,fwp);
     }while(BUFFERSIZE==rcnt&&rcnt==wcnt);
@@ -56,14 +60,18 @@ int main()
         0xda,0x79,0x17,0x14,
         0x60,0x15,0x35,0x94
     };
-
     char filename[FILENAMESIZE]={};
     int en=0;
+    
+    printf("输入要操作的文件名字\n>");
     scanf("%s",filename);
     getchar();
+
+    printf("选择操作(0为解密,1为加密)\n>");
     scanf("%d",&en);
+    getchar();
 
-    EDFile(filename,mainKey,en);
-
+    if(!EDFile(filename,mainKey,en))
+        printf("success!\n");
     return 0;
 }
