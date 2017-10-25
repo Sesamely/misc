@@ -37,18 +37,27 @@ void shiftRow(u8 *state)
         for(int i=0;i<4;i++)
             state[k++]=temp[i][j];
 }
-/*
-int main()
+
+void _shiftRow(u8 *state)
 {
-    u8 test[DATALENGTH] = {
-        0x63,0x63,0xb7,0x63,
-        0x51,0xe0,0x63,0x7c,
-        0x63,0x7c,0x63,0xb7,
-        0x8e,0x63,0x63,0x89,
-    };
-    shiftRow(test);
-    for(int i=0;i<16;i+=4)
-        dispByte((u8 *)&test[i],4);
-    return 0;
+    int CXR=0;
+    int k=0;
+    u8 temp[4][Nb]={};
+    for(int j=0;j<Nb;j++)
+        for(int i=0;i<4;i++)
+            temp[i][j]=state[k++];
+    switch(Nb)
+    {
+        case 4:CXR=0;break;
+        //case 6:
+        //case 8:
+        default:CXR=-1;break;
+    }
+    for(int i=0;i<Nb-1;i++)
+        leftShift((u8 *)temp[i+1],Nb-CX[CXR][i]);
+    k=0;
+    for(int j=0;j<Nb;j++)
+        for(int i=0;i<4;i++)
+            state[k++]=temp[i][j];
 }
-*/
+

@@ -9,7 +9,12 @@
 #include<stdio.h>
 #include<aeshead.h>
 #include<global.h>
-
+//u8Xu8
+u8 byteXbyte(u8 A,u8 B)
+{
+    u8 result=0;
+    return result;
+}
 //xTimes
 u8 xTimes(u8 byte)
 {
@@ -32,7 +37,7 @@ void leftShift(u8 *row,int n)
         row[4-n+i]=temp[i];
 }
 //显示n个字节
-void dispByte(const u8 *b,int n)
+void dispByte(u8 *b,int n)
 {
     for(int i=0;i<n;i++)
     {
@@ -40,14 +45,14 @@ void dispByte(const u8 *b,int n)
             printf("\n");
         printf("0x%02x\t",b[i]);
     }
-    printf("\n\n");
+    printf("\n");
 }
 //显示状态
-void dispState(const u8 *state)
+void dispState(u8 *state)
 {
     for(int i=0;i<(DATALENGTH/8);i++)
         printf("%02x",state[i]);
-    printf("\n\n");
+    printf("\n");
 }
 //显示第row行密钥
 void dispKey(int row)
@@ -56,10 +61,9 @@ void dispKey(int row)
         printf("%02x",W[4*row+i/4][i%4]);
     printf("\n");
 }
-//显示S盒
 void dispSbox()
 {
-    printf("以下显示S盒:\n\t\t");
+    printf("\t\t以下显示S盒:\n\t\t\t");
     for(int i=0;i<16;i++)
         printf("0x%02x\t",i);
     printf("\n");
@@ -69,24 +73,35 @@ void dispSbox()
             printf("\n0x%x0\t\t",i/16);
         printf("0x%02x\t",S[i]);
     }
-    printf("\nS盒显示结束\n");
+    printf("\n\t\tS盒显示结束\n");
 }
-//显示逆S盒
-void disp_Sbox()
+#endif
+/*
+int main()
 {
-    printf("以下显示逆S盒:\n\t\t");
-    for(int i=0;i<16;i++)
-        printf("0x%02x\t",i);
-    printf("\n");
+    u8 test[4]={0x1,0x2,0x3,0x4};
+    dispByte(test,4);
+    leftShift(test,1);
+    dispByte(test,4);
+    leftShift(test,2);
+    dispByte(test,4);
+    leftShift(test,3);
+    dispByte(test,4);
+    leftShift(test,4);
+    dispByte(test,4);
+    return 0;
+}
+
+int main()
+{
+    u8 rc=0x01;
     for(int i=0;i<256;i++)
     {
-        if(i%16==0)
-            printf("\n0x%x0\t\t",i/16);
-        printf("0x%02x\t",_S[i]);
+        if(i%4==0)
+            printf("\n");
+        printf("0x%02x\t",rc);
+        rc=xTimes(rc);
     }
-    printf("\n逆S盒显示结束\n");
+    printf("\n");
 }
-
-
-
-#endif
+*/

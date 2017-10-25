@@ -40,22 +40,3 @@ void expandKey(const u8 *mainKey)
             W[i/4][k]=temp[k]^W[i/4-Nk][k];
     }
 }
-/*
-int main()
-{
-    u8 mainK[KEYLENGTH]={
-        0x00,0x01,0x20,0x01,
-        0x71,0x01,0x98,0xae,
-        0xda,0x79,0x17,0x14,
-        0x60,0x15,0x35,0x94
-    };
-    expandKey(mainK);
-    for(int i=0;i<120;i++)
-    {
-        if(i%4==0)
-            printf("\n");
-        dispByte((u8 *)W[i],4);
-    }
-    return 0;
-}
-*/
