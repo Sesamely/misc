@@ -8,10 +8,8 @@
 #include<stdio.h>
 #include<lib.c>
 #include<aeshead.h>
-#define NO_USE_1    1
-#define USE_2       2
 #include<global.h>
-
+#include<stastic.c>
 //放射
 /*
 void X(u8 *b)
@@ -29,7 +27,7 @@ void X(u8 *b)
         b[i]=temp[i];
 }
 */
-void X(u8 *b)
+void X(u8 *b,int ind,u8 var)
 {
     u8 temp=*b;
     u8 bits[8]={};
@@ -41,14 +39,14 @@ void X(u8 *b)
         //printf("0x%02x\t",bits[i]);
     }
     //printf("\n");
-    bitresult[0]=bits[0]^bits[4]^bits[5]^bits[6]^bits[7]^0x01;
-    bitresult[1]=bits[0]^bits[1]^bits[5]^bits[6]^bits[7]^0x01;
-    bitresult[2]=bits[0]^bits[1]^bits[2]^bits[6]^bits[7];
-    bitresult[3]=bits[0]^bits[1]^bits[2]^bits[3]^bits[7];
-    bitresult[4]=bits[0]^bits[1]^bits[2]^bits[3]^bits[4];
-    bitresult[5]=bits[1]^bits[2]^bits[3]^bits[4]^bits[5]^0x01;
-    bitresult[6]=bits[2]^bits[3]^bits[4]^bits[5]^bits[6]^0x01;
-    bitresult[7]=bits[3]^bits[4]^bits[5]^bits[6]^bits[7];
+    bitresult[0]=bits[(ind)%8]^bits[(ind+1)%8]^bits[(ind+2)%8]^bits[(ind+3)%8]^bits[(ind+4)%8];
+    bitresult[1]=bits[(ind+5)%8]^bits[(ind+1)%8]^bits[(ind+2)%8]^bits[(ind+3)%8]^bits[(ind+4)%8];
+    bitresult[2]=bits[(ind+5)%8]^bits[(ind+6)%8]^bits[(ind+2)%8]^bits[(ind+3)%8]^bits[(ind+4)%8];
+    bitresult[3]=bits[(ind+5)%8]^bits[(ind+6)%8]^bits[(ind+7)%8]^bits[(ind+3)%8]^bits[(ind+4)%8];
+    bitresult[4]=bits[(ind+5)%8]^bits[(ind+6)%8]^bits[(ind+7)%8]^bits[(ind+8)%8]^bits[(ind+4)%8];
+    bitresult[5]=bits[(ind+5)%8]^bits[(ind+6)%8]^bits[(ind+7)%8]^bits[(ind+8)%8]^bits[(ind+9)%8];
+    bitresult[6]=bits[(ind+6)%8]^bits[(ind+7)%8]^bits[(ind+8)%8]^bits[(ind+9)%8]^bits[(ind+10)%8];
+    bitresult[7]=bits[(ind+7)%8]^bits[(ind+8)%8]^bits[(ind+9)%8]^bits[(ind+10)%8]^bits[(ind+11)%8];
 
     *b=0x00;
     for(int i=0;i<8;i++)
@@ -56,9 +54,10 @@ void X(u8 *b)
         *b^=bitresult[i]<<i;
        // printf("0x%02x\t",bitresult[i]);
     }
+    *b=*b^var;
     //printf("\n0x%02x\n\n",*b);
 }
-void generateNewS(u8 multiplicator)
+void generateNewS(u8 multiplicator,int ind,u8 var)
 {
     for(int i=0;i<256;i++)
         if(i==0)
@@ -66,13 +65,23 @@ void generateNewS(u8 multiplicator)
         else 
             S[i]=index3[(log3[i]*multiplicator)%255];
     for(int i=0;i<256;i++)
-        X((u8 *)&S[i]);
+        X((u8 *)&S[i],ind,var);
 }
-/*
+
+
 int main()
 {
-    generateNewS();
-    dispByte(S,256);
+    u8 m=0x01;
+    for(int i=0;i<8;i++)
+    {
+        for(int j=0;j<8;j++)
+        {
+            printf("\n\n次方数：0x%02x\t\t循环开始值 ：%d\n",m^0xFF,j);
+            generateNewS(m^0xFF,j,0x63);
+            dispSbox();
+            analysisSbox();
+        }
+        m=m<<1;
+    }
     return 0;
 }
-*/
