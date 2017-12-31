@@ -9,8 +9,24 @@
 #include<lib.c>
 #include<aeshead.h>
 #include<global.h>
-
+//放射
+/*
 void X(u8 *b)
+{
+    u8 temp[8];
+    temp[0]=b[0]^b[4]^b[5]^b[6]^b[7];
+    temp[1]=b[0]^b[1]^b[5]^b[6]^b[7];
+    temp[2]=b[0]^b[1]^b[2]^b[6]^b[7];
+    temp[3]=b[0]^b[1]^b[2]^b[3]^b[7];
+    temp[4]=b[0]^b[1]^b[2]^b[3]^b[4];
+    temp[5]=b[1]^b[2]^b[3]^b[4]^b[5];
+    temp[6]=b[2]^b[3]^b[4]^b[5]^b[6];
+    temp[7]=b[3]^b[4]^b[5]^b[6]^b[7];
+    for(int i=0;i<8;i++)
+        b[i]=temp[i];
+}
+*/
+void X(u8 *b,int ind,u8 var)
 {
     u8 temp=*b;
     u8 bits[8]={};
@@ -22,14 +38,14 @@ void X(u8 *b)
         //printf("0x%02x\t",bits[i]);
     }
     //printf("\n");
-    bitresult[0]=bits[0]^bits[4]^bits[5]^bits[6]^bits[7]^0x01;
-    bitresult[1]=bits[0]^bits[1]^bits[5]^bits[6]^bits[7]^0x01;
-    bitresult[2]=bits[0]^bits[1]^bits[2]^bits[6]^bits[7];
-    bitresult[3]=bits[0]^bits[1]^bits[2]^bits[3]^bits[7];
-    bitresult[4]=bits[0]^bits[1]^bits[2]^bits[3]^bits[4];
-    bitresult[5]=bits[1]^bits[2]^bits[3]^bits[4]^bits[5]^0x01;
-    bitresult[6]=bits[2]^bits[3]^bits[4]^bits[5]^bits[6]^0x01;
-    bitresult[7]=bits[3]^bits[4]^bits[5]^bits[6]^bits[7];
+    bitresult[0]=bits[(ind)%8]^bits[(ind+1)%8]^bits[(ind+2)%8]^bits[(ind+3)%8]^bits[(ind+4)%8];
+    bitresult[1]=bits[(ind+5)%8]^bits[(ind+1)%8]^bits[(ind+2)%8]^bits[(ind+3)%8]^bits[(ind+4)%8];
+    bitresult[2]=bits[(ind+5)%8]^bits[(ind+6)%8]^bits[(ind+2)%8]^bits[(ind+3)%8]^bits[(ind+4)%8];
+    bitresult[3]=bits[(ind+5)%8]^bits[(ind+6)%8]^bits[(ind+7)%8]^bits[(ind+3)%8]^bits[(ind+4)%8];
+    bitresult[4]=bits[(ind+5)%8]^bits[(ind+6)%8]^bits[(ind+7)%8]^bits[(ind+8)%8]^bits[(ind+4)%8];
+    bitresult[5]=bits[(ind+5)%8]^bits[(ind+6)%8]^bits[(ind+7)%8]^bits[(ind+8)%8]^bits[(ind+9)%8];
+    bitresult[6]=bits[(ind+6)%8]^bits[(ind+7)%8]^bits[(ind+8)%8]^bits[(ind+9)%8]^bits[(ind+10)%8];
+    bitresult[7]=bits[(ind+7)%8]^bits[(ind+8)%8]^bits[(ind+9)%8]^bits[(ind+10)%8]^bits[(ind+11)%8];
 
     *b=0x00;
     for(int i=0;i<8;i++)
@@ -37,22 +53,20 @@ void X(u8 *b)
         *b^=bitresult[i]<<i;
        // printf("0x%02x\t",bitresult[i]);
     }
+    *b=*b^var;
     //printf("\n0x%02x\n\n",*b);
 }
-void generateNewS(u8 multiplicator)
+void generateNewS(u8 multiplicator,int ind,u8 var)
 {
-    //-----------------------------------------
-    //S盒子
     for(int i=0;i<256;i++)
         if(i==0)
             S[i]=0;
         else 
             S[i]=index3[(log3[i]*multiplicator)%255];
-    for(int i=0;i<256;i++)
-        X((u8 *)&S[i]);
-    //------------------------------------------
-    //S逆盒子_S
-    for(int i=0;i<256;i++)
-        _S[S[i]]=i;
+    for(int i=0;i<256;i++) {
+        X((u8 *)&S[i],ind,var);
+        _S[S[i]] = i;
+    }
 }
+
 

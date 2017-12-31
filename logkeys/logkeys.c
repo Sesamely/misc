@@ -26,7 +26,7 @@ int main()
     {
         int temp=ev.code;
         read(fd,&ev,sizeof(struct input_event));
-        if(ev.code == 0 || ev.code==4 )
+        if(ev.code == 0 || ev.code==4 || ev.code == temp)
             continue;
         if(ev.value == 1)
         {

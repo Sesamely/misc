@@ -8,7 +8,8 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include<en_decrypt.c>
+#include"./en_decrypt.c"
+#include"./md5.c"
 #define BUFFERSIZE 4096
 #define FILENAMESIZE 64
 
@@ -29,7 +30,7 @@ int EDFile(char *filename,u8 *mainKey,int en)
     if((fwp=fopen(filename,"wb"))==NULL)
         return 2;
 
-    generateNewS(0xFE);
+    generateNewS(0xFE,3,0x64);
     expandKey(mainKey);
 
     do{
@@ -54,14 +55,15 @@ int EDFile(char *filename,u8 *mainKey,int en)
 
 int main()
 {
-    u8 mainKey[] = {
-        0x00,0x01,0x20,0x01,
-        0x71,0x01,0x98,0xae,
-        0xda,0x79,0x17,0x14,
-        0x60,0x15,0x35,0x94
-    };
     char filename[FILENAMESIZE]={};
-    int en=0;
+    int en;
+    u8 mainKey[16] = {};
+    char password[50] = {};
+    
+    printf("请输入密码\n>");
+    scanf("%s",password);
+    
+    md5(mainKey,password);
     
     printf("输入要操作的文件名字\n>");
     scanf("%s",filename);

@@ -8,13 +8,13 @@
 #include<stdio.h>
 #include"./global.h"
 #include"./aeshead.h"
+#include"./generateNewS.c"
 #include"./lib.c"
 #include"./expandK.c"
 #include"./byteSub.c"
 #include"./shiftRow.c"
 #include"./mixColumn.c"
 #include"./addRoundKey.c"
-#include"./generateNewS.c"
 
 //--------------------------------------------
 //encrypt
