@@ -1,0 +1,13 @@
+#!/bin/zsh
+
+# AES and MD5
+
+# exec the sh to compile
+# Then obtain the executable file 'crypt' in current directory
+
+gcc -O3 -I . -o crypt fileCrypt.c 2> /dev/null
+
+# usage
+#
+# exec the compiled file 'crypt' in the shell, input according to the prompt.
+#

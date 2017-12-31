@@ -5,9 +5,10 @@
 	> Created Time: 2017年10月25日 星期三 09时38分14秒
  ************************************************************************/
 
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
 #include"./en_decrypt.c"
 #include"./md5.c"
 #define BUFFERSIZE 4096
@@ -30,7 +31,7 @@ int EDFile(char *filename,u8 *mainKey,int en)
     if((fwp=fopen(filename,"wb"))==NULL)
         return 2;
 
-    generateNewS(0xFE,3,0x64);
+    generateNewS(0xFE,3,mainKey[0]);
     expandKey(mainKey);
 
     do{
@@ -58,22 +59,34 @@ int main()
     char filename[FILENAMESIZE]={};
     int en;
     u8 mainKey[16] = {};
-    char password[50] = {};
+    char password[FILENAMESIZE] = {};
+    printf("***Welcome AEScrypt programe,Please input according to the prompt***\n");
+    while(1)
+    {
+        printf("\n\n\t...Please input the password to de_encrypt...\n\t\t>>>");
+        scanf("%s",password);
+        md5(mainKey,password);
+        dispByte(mainKey,16);
     
-    printf("请输入密码\n>");
-    scanf("%s",password);
-    
-    md5(mainKey,password);
-    
-    printf("输入要操作的文件名字\n>");
-    scanf("%s",filename);
-    getchar();
+        printf("\t...Please input the filename you wanna to de_encrypt...\n\t\t>>>");
+        scanf("%s",filename);
 
-    printf("选择操作(0为解密,1为加密)\n>");
-    scanf("%d",&en);
-    getchar();
+        printf("\t...Please input '1' to ENcrypt or '0' to DEcrypt...\n\t\t>>>");
+        scanf("%d",&en);
+        getchar();
 
-    if(!EDFile(filename,mainKey,en))
-        printf("success!\n");
+        int result = EDFile(filename,mainKey,en);
+        switch(result) {
+            case 0:printf("\e[31m...Success...\e[0m\n\n");break;
+            case 1:printf("\e[31m...Open file failing...\e[0m\n\n");break;
+            case 2:printf("\e[31m...Write file failing...\e[0m\n\n");break;
+            default:;
+        }
+        printf("...Are you willing to continue?(N to stop,ANYOTHER KEY to continue)...");
+        if(toupper(getchar())=='N') {
+            printf("...Bye~...\n");
+            break;
+        } 
+    }
     return 0;
 }
