@@ -63,19 +63,23 @@ int main()
     printf("***Welcome AEScrypt programe,Please input according to the prompt***\n");
     while(1)
     {
-        printf("\n\n\t...Please input the password to de_encrypt...\n\t\t>>>");
-        scanf("%s",password);
+        printf("\n\n\t...Please input the password to de_encrypt...\n\t\t\e[0m➤ \e[0m");
+        if (!scanf("%s",password)) { return -1; }
         md5(mainKey,password);
-        dispByte(mainKey,16);
     
-        printf("\t...Please input the filename you wanna to de_encrypt...\n\t\t>>>");
-        scanf("%s",filename);
+        printf("\t...Please input the filename you wanna to de_encrypt...\n\t\t\e[0m➤ \e[0m");
+        if (!scanf("%s",filename)) { return -1; }
 
-        printf("\t...Please input '1' to ENcrypt or '0' to DEcrypt...\n\t\t>>>");
-        scanf("%d",&en);
+        printf("\t...Please input '1' to ENcrypt or '0' to DEcrypt...\n\t\t\e[0m➤ \e[0m");
+        if (!scanf("%d",&en)) { return -1; }
         getchar();
 
         int result = EDFile(filename,mainKey,en);
+/*
+ *        dispByte(mainKey,16);
+ *        dispSbox();
+ *        disp_Sbox();
+ */
         switch(result) {
             case 0:printf("\e[31m...Success...\e[0m\n\n");break;
             case 1:printf("\e[31m...Open file failing...\e[0m\n\n");break;

@@ -10,23 +10,7 @@
 #include<aeshead.h>
 #include<global.h>
 #include<stastic.c>
-//放射
-/*
-void X(u8 *b)
-{
-    u8 temp[8];
-    temp[0]=b[0]^b[4]^b[5]^b[6]^b[7];
-    temp[1]=b[0]^b[1]^b[5]^b[6]^b[7];
-    temp[2]=b[0]^b[1]^b[2]^b[6]^b[7];
-    temp[3]=b[0]^b[1]^b[2]^b[3]^b[7];
-    temp[4]=b[0]^b[1]^b[2]^b[3]^b[4];
-    temp[5]=b[1]^b[2]^b[3]^b[4]^b[5];
-    temp[6]=b[2]^b[3]^b[4]^b[5]^b[6];
-    temp[7]=b[3]^b[4]^b[5]^b[6]^b[7];
-    for(int i=0;i<8;i++)
-        b[i]=temp[i];
-}
-*/
+
 void X(u8 *b,int ind,u8 var)
 {
     u8 temp=*b;
@@ -77,7 +61,7 @@ int main()
         for(int j=0;j<8;j++)
         {
             printf("\n\n次方数：0x%02x\t\t循环开始值 ：%d\n",m^0xFF,j);
-            generateNewS(m^0xFF,j,0x63);
+            generateNewS(m^0xFF,j,0x00);
             dispSbox();
             analysisSbox();
         }

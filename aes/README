@@ -5,7 +5,7 @@
 # exec the sh to compile
 # Then obtain the executable file 'crypt' in current directory
 
-gcc -O3 -I . -o crypt fileCrypt.c 2> /dev/null
+gcc -O3 -I . -o ~/test/crypt fileCrypt.c 
 
 # usage
 #
